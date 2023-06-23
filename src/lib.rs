@@ -18,6 +18,7 @@ use bevy::sprite::Mesh2dHandle;
 use bevy::{
     math::Vec3A,
     prelude::*,
+    reflect::TypePath,
     render::{
         camera::Camera,
         mesh::{Indices, Mesh, VertexAttributeValues},
@@ -171,7 +172,7 @@ impl<T: Reflect> Default for RaycastMesh<T> {
 /// The `RaycastSource` component is used to generate rays with the specified `cast_method`. A `ray`
 /// is generated when the RaycastSource is initialized, either by waiting for update_raycast system
 /// to process the ray, or by using a `with_ray` function.`
-#[derive(Component, Clone)]
+#[derive(Component, Clone, TypePath)]
 pub struct RaycastSource<T: Reflect + Clone> {
     pub cast_method: RaycastMethod,
     pub ray: Option<Ray3d>,
@@ -179,7 +180,7 @@ pub struct RaycastSource<T: Reflect + Clone> {
     _marker: PhantomData<fn() -> T>,
 }
 
-bevy::reflect::impl_reflect_value!(RaycastSource<T: Reflect + Clone>);
+bevy::reflect::impl_reflect_value!(::bevy_mod_raycast::RaycastSource<T: Reflect + Clone>);
 bevy::reflect::impl_from_reflect_value!(RaycastSource<T: Reflect + Clone>);
 
 impl<T: Reflect + Clone> Default for RaycastSource<T> {

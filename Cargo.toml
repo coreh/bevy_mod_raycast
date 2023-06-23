@@ -37,3 +37,6 @@ debug = ["bevy/bevy_pbr"]
 [[bench]]
 name = "ray_mesh_intersection"
 harness = false
+
+[patch.crates-io]
+bevy = { git = 'https://github.com/bevyengine/bevy.git', branch = 'main' }
