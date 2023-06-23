@@ -237,11 +237,16 @@ pub mod rays {
         ) -> Option<Self> {
             let view = camera_transform.compute_matrix();
 
-            let (viewport_min, viewport_max) = camera.logical_viewport_rect()?;
+            let Rect {
+                min: viewport_min,
+                max: viewport_max,
+            } = camera.logical_viewport_rect()?;
             let screen_size = camera.logical_target_size()?;
             let viewport_size = viewport_max - viewport_min;
-            let adj_cursor_pos =
-                cursor_pos_screen - Vec2::new(viewport_min.x, screen_size.y - viewport_max.y);
+            let cursor_pos_screen_flipped =
+                Vec2::new(cursor_pos_screen.x, screen_size.y - cursor_pos_screen.y);
+            let adj_cursor_pos = cursor_pos_screen_flipped
+                - Vec2::new(viewport_min.x, screen_size.y - viewport_max.y);
 
             let projection = camera.projection_matrix();
             let far_ndc = projection.project_point3(Vec3::NEG_Z).z;
