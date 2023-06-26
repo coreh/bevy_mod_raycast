@@ -1,5 +1,5 @@
 use bevy::{
-    diagnostic::{Diagnostics, FrameTimeDiagnosticsPlugin},
+    diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin},
     math::Vec3A,
     prelude::*,
     render::primitives::Aabb,
@@ -24,8 +24,8 @@ fn main() {
             }),
             ..default()
         }))
-        .add_plugin(FrameTimeDiagnosticsPlugin::default())
-        .add_plugin(DefaultRaycastingPlugin::<MyRaycastSet>::default())
+        .add_plugins(FrameTimeDiagnosticsPlugin::default())
+        .add_plugins(DefaultRaycastingPlugin::<MyRaycastSet>::default())
         // You will need to pay attention to what order you add systems! Putting them in the wrong
         // order can result in multiple frames of latency. Ray casting should probably happen after
         // the positions of your meshes have been updated in the UPDATE stage.
@@ -218,7 +218,7 @@ fn manage_aabb(
     }
 }
 
-fn update_fps(diagnostics: Res<Diagnostics>, mut query: Query<&mut Text, With<FpsText>>) {
+fn update_fps(diagnostics: Res<DiagnosticsStore>, mut query: Query<&mut Text, With<FpsText>>) {
     for mut text in &mut query {
         if let Some(fps) = diagnostics.get(FrameTimeDiagnosticsPlugin::FPS) {
             if let Some(average) = fps.smoothed() {

@@ -6,7 +6,7 @@ use bevy_mod_raycast::{
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_plugin(DefaultRaycastingPlugin::<MyRaycastSet>::default())
+        .add_plugins(DefaultRaycastingPlugin::<MyRaycastSet>::default())
         .add_systems(
             First,
             update_raycast_with_cursor.before(RaycastSystem::BuildRays::<MyRaycastSet>),

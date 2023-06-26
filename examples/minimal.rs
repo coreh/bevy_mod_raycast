@@ -12,7 +12,7 @@ use bevy_mod_raycast::{
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_plugin(DefaultRaycastingPlugin::<MyRaycastSet>::default())
+        .add_plugins(DefaultRaycastingPlugin::<MyRaycastSet>::default())
         .add_systems(Startup, setup)
         .add_systems(Update, rotator)
         .add_systems(Update, intersection)
