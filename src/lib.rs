@@ -32,7 +32,7 @@ pub use crate::{primitives::*, raycast::*};
 pub use debug::*;
 
 pub struct DefaultRaycastingPlugin<T>(pub PhantomData<fn() -> T>);
-impl<T: 'static + Send + Sync + Reflect + Clone> Plugin for DefaultRaycastingPlugin<T> {
+impl<T: 'static + Send + Sync + Reflect + Clone + TypePath> Plugin for DefaultRaycastingPlugin<T> {
     fn build(&self, app: &mut App) {
         app.init_resource::<DefaultPluginState<T>>().add_systems(
             First,
@@ -158,8 +158,8 @@ pub struct RaycastMesh<T: Reflect> {
     _marker: PhantomData<T>,
 }
 
-bevy::reflect::impl_reflect_value!(RaycastMesh<T: Reflect + Clone>);
-bevy::reflect::impl_from_reflect_value!(RaycastMesh<T: Reflect + Clone>);
+bevy::reflect::impl_reflect_value!((in bevy_mod_raycast)RaycastMesh<T: Reflect + Clone>);
+bevy::reflect::impl_from_reflect_value!((in bevy_mod_raycast)RaycastMesh<T: TypePath + Reflect + Clone>);
 
 impl<T: Reflect> Default for RaycastMesh<T> {
     fn default() -> Self {
@@ -172,7 +172,7 @@ impl<T: Reflect> Default for RaycastMesh<T> {
 /// The `RaycastSource` component is used to generate rays with the specified `cast_method`. A `ray`
 /// is generated when the RaycastSource is initialized, either by waiting for update_raycast system
 /// to process the ray, or by using a `with_ray` function.`
-#[derive(Component, Clone, TypePath)]
+#[derive(Component, Clone)]
 pub struct RaycastSource<T: Reflect + Clone> {
     pub cast_method: RaycastMethod,
     pub ray: Option<Ray3d>,
@@ -180,8 +180,8 @@ pub struct RaycastSource<T: Reflect + Clone> {
     _marker: PhantomData<fn() -> T>,
 }
 
-bevy::reflect::impl_reflect_value!(::bevy_mod_raycast::RaycastSource<T: Reflect + Clone>);
-bevy::reflect::impl_from_reflect_value!(RaycastSource<T: Reflect + Clone>);
+bevy::reflect::impl_reflect_value!((in bevy_mod_raycast)RaycastSource<T: Reflect + Clone>);
+bevy::reflect::impl_from_reflect_value!((in bevy_mod_raycast)RaycastSource<T: TypePath + Reflect + Clone>);
 
 impl<T: Reflect + Clone> Default for RaycastSource<T> {
     fn default() -> Self {
