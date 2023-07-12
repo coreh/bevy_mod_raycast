@@ -22,7 +22,7 @@ fn main() {
         // plugin. This includes building rays, casting them, and placing a debug cursor at the
         // intersection. For more advanced uses, you can compose the systems in this plugin however
         // you need. For example, you might exclude the debug cursor system.
-        .add_plugin(DefaultRaycastingPlugin::<MyRaycastSet>::default())
+        .add_plugins(DefaultRaycastingPlugin::<MyRaycastSet>::default())
         // You will need to pay attention to what order you add systems! Putting them in the wrong
         // order can result in multiple frames of latency. Ray casting should probably happen near
         // start of the frame. For example, we want to be sure this system runs before we construct

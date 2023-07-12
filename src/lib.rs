@@ -18,6 +18,7 @@ use bevy::sprite::Mesh2dHandle;
 use bevy::{
     math::Vec3A,
     prelude::*,
+    reflect::TypePath,
     render::{
         camera::Camera,
         mesh::{Indices, Mesh, VertexAttributeValues},
@@ -31,7 +32,7 @@ pub use crate::{primitives::*, raycast::*};
 pub use debug::*;
 
 pub struct DefaultRaycastingPlugin<T>(pub PhantomData<fn() -> T>);
-impl<T: 'static + Send + Sync + Reflect + Clone> Plugin for DefaultRaycastingPlugin<T> {
+impl<T: 'static + Send + Sync + Reflect + Clone + TypePath> Plugin for DefaultRaycastingPlugin<T> {
     fn build(&self, app: &mut App) {
         app.init_resource::<DefaultPluginState<T>>().add_systems(
             First,
@@ -152,15 +153,13 @@ impl<T> DefaultPluginState<T> {
 /// # Requirements
 ///
 /// The marked entity must also have a [Mesh] component.
-#[derive(Component, Debug, Clone)]
-pub struct RaycastMesh<T: Reflect> {
+#[derive(Component, Debug, Clone, Reflect)]
+#[reflect_value]
+pub struct RaycastMesh<T: Reflect + Clone> {
     _marker: PhantomData<T>,
 }
 
-bevy::reflect::impl_reflect_value!(RaycastMesh<T: Reflect + Clone>);
-bevy::reflect::impl_from_reflect_value!(RaycastMesh<T: Reflect + Clone>);
-
-impl<T: Reflect> Default for RaycastMesh<T> {
+impl<T: Reflect + Clone> Default for RaycastMesh<T> {
     fn default() -> Self {
         RaycastMesh {
             _marker: PhantomData,
@@ -171,16 +170,14 @@ impl<T: Reflect> Default for RaycastMesh<T> {
 /// The `RaycastSource` component is used to generate rays with the specified `cast_method`. A `ray`
 /// is generated when the RaycastSource is initialized, either by waiting for update_raycast system
 /// to process the ray, or by using a `with_ray` function.`
-#[derive(Component, Clone)]
+#[derive(Component, Clone, Reflect)]
+#[reflect_value]
 pub struct RaycastSource<T: Reflect + Clone> {
     pub cast_method: RaycastMethod,
     pub ray: Option<Ray3d>,
     intersections: Vec<(Entity, IntersectionData)>,
     _marker: PhantomData<fn() -> T>,
 }
-
-bevy::reflect::impl_reflect_value!(RaycastSource<T: Reflect + Clone>);
-bevy::reflect::impl_from_reflect_value!(RaycastSource<T: Reflect + Clone>);
 
 impl<T: Reflect + Clone> Default for RaycastSource<T> {
     fn default() -> Self {

@@ -22,7 +22,7 @@ fn main() {
             }),
             ..default()
         }))
-        .add_plugin(DefaultRaycastingPlugin::<Ground>::default())
+        .add_plugins(DefaultRaycastingPlugin::<Ground>::default())
         .add_systems(Startup, setup)
         .add_systems(Startup, setup_ui)
         .add_systems(
